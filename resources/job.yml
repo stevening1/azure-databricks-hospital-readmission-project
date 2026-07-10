@@ -1,66 +1,57 @@
 resources:
   jobs:
-    end_to_end_healthcare_project_job:
-      name: end-to-end-healthcare-project-job-updated
+    healthcare_de_proj_job:
+      name: healthcare-de-proj-job
       tasks:
         - task_key: diagnosis_raw_ingestion_task
           notebook_task:
             notebook_path: ../bronze/diagnosis_raw_data_ingestion.ipynb
             source: WORKSPACE
-        
-        - task_key: dim_diagnosis_ingestion
+        - task_key: create_dim_diagnosis
           depends_on:
             - task_key: diagnosis_raw_ingestion_task
           notebook_task:
             notebook_path: ../silver/dim_diagnosis_ingestion.ipynb
             source: WORKSPACE
-        
         - task_key: hospitals_raw_ingestion_task
           notebook_task:
             notebook_path: ../bronze/hospitals_raw_data_ingestion.ipynb
             source: WORKSPACE
-        
-        - task_key: dim_hospital_ingestion
+        - task_key: create_dim_hospitals
           depends_on:
             - task_key: hospitals_raw_ingestion_task
           notebook_task:
             notebook_path: ../silver/dim_hospital_ingestion.ipynb
             source: WORKSPACE
-        
-        - task_key: patients_raw_ingestion_task
+        - task_key: patient_raw_ingestion_task
           notebook_task:
             notebook_path: ../bronze/patients_raw_data_ingestion.ipynb
             source: WORKSPACE
-        
-        - task_key: dim_patient_ingestion
+        - task_key: create_dim_patient
           depends_on:
-            - task_key: patients_raw_ingestion_task
+            - task_key: patient_raw_ingestion_task
           notebook_task:
             notebook_path: ../silver/dim_patient_ingestion.ipynb
             source: WORKSPACE
-        
-        - task_key: visits_raw_ingestion_task
+        - task_key: visit_raw_ingestion_task
           notebook_task:
             notebook_path: ../bronze/visits_raw_data_ingestion.ipynb
             source: WORKSPACE
-        
-        - task_key: fact_visit_ingestion
+        - task_key: create_fact_visit
           depends_on:
-            - task_key: dim_patient_ingestion
-            - task_key: dim_hospital_ingestion
-            - task_key: dim_diagnosis_ingestion
-            - task_key: visits_raw_ingestion_task
+            - task_key: visit_raw_ingestion_task
+            - task_key: create_dim_diagnosis
+            - task_key: create_dim_hospitals
+            - task_key: create_dim_patient
           notebook_task:
             notebook_path: ../silver/fact_visit_ingestion.ipynb
             source: WORKSPACE
-        
         - task_key: resubmission_analysis
           depends_on:
-            - task_key: fact_visit_ingestion
+            - task_key: create_fact_visit
           notebook_task:
             notebook_path: ../gold/resubmission_analysis.ipynb
             source: WORKSPACE
-      
       queue:
         enabled: true
       performance_target: PERFORMANCE_OPTIMIZED
