@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code (with submodules)
         uses: actions/checkout@v4
         with:
-          submodules: true
+          submodules: recursive
 
       - name: Setup Databricks CLI
         uses: databricks/setup-cli@main
