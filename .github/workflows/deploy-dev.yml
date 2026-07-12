@@ -30,6 +30,6 @@ jobs:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
-          cd azure-databricks-hospital-readmission-project
+          cd azure_databricks_hospital_readmission_project
           databricks bundle deploy -t dev
 
