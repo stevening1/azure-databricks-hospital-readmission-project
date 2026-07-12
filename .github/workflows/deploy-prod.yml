@@ -10,20 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout code (with submodules)
+      - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
+      
       - name: Setup Databricks CLI
         uses: databricks/setup-cli@main
-
+      
       - name: Deploy to Production
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
-          cd azure-databricks-hospital-readmission-project
           databricks bundle deploy -t prod
       
 
